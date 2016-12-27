@@ -1,6 +1,5 @@
 package com.chaos.fx.hades.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,7 +26,7 @@ public class FirstController {
 
 
     @FXML
-    public void submitAction (ActionEvent event) throws IOException {
+    public void submitAction () throws IOException {
         if (userName.getText().equals("")
                 || primaryKey.getText().equals("")
                 || projectName.getText().equals("")) {
@@ -42,7 +41,7 @@ public class FirstController {
     }
 
     @FXML
-    public void clearMetaAction (ActionEvent event) {
+    public void clearAction () {
         userName.setText("");
         primaryKey.setText("");
         projectName.setText("");
