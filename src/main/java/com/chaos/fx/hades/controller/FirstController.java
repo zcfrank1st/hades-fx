@@ -1,5 +1,6 @@
 package com.chaos.fx.hades.controller;
 
+import com.chaos.fx.hades.model.DataSaver;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,12 +28,19 @@ public class FirstController {
 
     @FXML
     public void submitAction () throws IOException {
-        if (userName.getText().equals("")
-                || primaryKey.getText().equals("")
-                || projectName.getText().equals("")) {
+        String userNameText = userName.getText();
+        String primaryKeyText = primaryKey.getText();
+        String projectNameText = projectName.getText();
+
+        if (userNameText.equals("")
+                || primaryKeyText.equals("")
+                || projectNameText.equals("")) {
 
             makeAlert(" Warning ! ", "用户名，私钥或者项目名中有未填写的");
         } else {
+            DataSaver.INSTANCE.setData("userName", userNameText);
+            DataSaver.INSTANCE.setData("primaryKey", primaryKeyText);
+            DataSaver.INSTANCE.setData("projectName", projectNameText);
             Stage stage = (Stage) submitBtn.getScene().getWindow();
             Parent root = FXMLLoader.load(ClassLoader.getSystemResource("second.fxml"));
             Scene scene = new Scene(root);
