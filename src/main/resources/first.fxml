@@ -7,21 +7,20 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chaos.fx.hades.controller.FirstController">
    <children>
-      <Button layoutX="242.0" layoutY="334.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="128.0" text="Submit" />
-      <TextField layoutX="158.0" layoutY="151.0" prefHeight="34.0" prefWidth="330.0" />
-      <TextField layoutX="158.0" layoutY="210.0" prefHeight="34.0" prefWidth="330.0" />
-      <Button layoutX="9.0" layoutY="9.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="128.0" text="Clear Meta" />
-      <Label layoutX="65.0" layoutY="160.0" prefHeight="17.0" prefWidth="68.0" text="UserName" />
-      <Label layoutX="65.0" layoutY="218.0" prefHeight="17.0" prefWidth="75.0" text="PrimaryKey" />
+      <Button fx:id="submitBtn" layoutX="242.0" layoutY="334.0" mnemonicParsing="false" onAction="#submitAction" prefHeight="27.0" prefWidth="128.0" text="Submit" />
+      <TextField fx:id="userName" layoutX="183.0" layoutY="153.0" prefHeight="34.0" prefWidth="330.0" />
+      <TextField fx:id="primaryKey" layoutX="183.0" layoutY="210.0" prefHeight="34.0" prefWidth="330.0" />
+      <Button layoutX="9.0" layoutY="9.0" mnemonicParsing="false" onAction="#clearMetaAction" prefHeight="27.0" prefWidth="128.0" text="Clear Meta" />
+      <Label layoutX="90.0" layoutY="162.0" prefHeight="17.0" prefWidth="68.0" text="UserName" />
+      <Label layoutX="87.0" layoutY="219.0" prefHeight="17.0" prefWidth="75.0" text="PrimaryKey" />
       <ImageView fitHeight="92.0" fitWidth="183.0" layoutX="260.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="hades.png" />
          </image>
       </ImageView>
-      <TextField layoutX="158.0" layoutY="273.0" prefHeight="34.0" prefWidth="330.0" />
-      <Label layoutX="65.0" layoutY="282.0" prefHeight="17.0" prefWidth="81.0" text="ProjectName" />
+      <TextField fx:id="projectName" layoutX="183.0" layoutY="274.0" prefHeight="34.0" prefWidth="330.0" />
+      <Label layoutX="84.0" layoutY="283.0" prefHeight="17.0" prefWidth="81.0" text="ProjectName" />
    </children>
 </Pane>
