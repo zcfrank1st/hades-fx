@@ -1,0 +1,32 @@
+group 'com.chaos'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.7.0'
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+
+    }
+}
+apply plugin: 'java'
+apply plugin: 'javafx-gradle-plugin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+
+jfx {
+    // minimal requirement for jfxJar-task
+    mainClass = 'com.chaos.fx.hades.Main'
+
+    // minimal requirement for jfxNative-task
+    vendor = 'Hades-fx'
+}
