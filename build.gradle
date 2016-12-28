@@ -40,6 +40,9 @@ jfx {
     // minimal requirement for jfxJar-task
     mainClass = 'com.chaos.fx.hades.Main'
 
-    // minimal requirement for jfxNative-task
-    vendor = 'Hades-fx'
+    //jfxNative
+    vendor = 'com.chao.hades'
+    appName = "HadesFx"
+    nativeReleaseVersion = "1.0"
+    bundler = "ALL"
 }
