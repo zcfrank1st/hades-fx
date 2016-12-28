@@ -10,17 +10,19 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chaos.fx.hades.controller.FirstController">
    <children>
       <Button fx:id="submitBtn" layoutX="328.0" layoutY="334.0" mnemonicParsing="false" onAction="#submitAction" prefHeight="27.0" prefWidth="185.0" text="Submit" />
-      <TextField fx:id="userName" layoutX="183.0" layoutY="153.0" prefHeight="34.0" prefWidth="330.0" />
-      <TextField fx:id="primaryKey" layoutX="183.0" layoutY="210.0" prefHeight="34.0" prefWidth="330.0" />
+      <TextField fx:id="userName" layoutX="183.0" layoutY="128.0" prefHeight="34.0" prefWidth="330.0" promptText="zcfrank1st" />
+      <TextField fx:id="privateKey" layoutX="183.0" layoutY="175.0" prefHeight="34.0" prefWidth="330.0" promptText="FFTTTF12FASD" />
       <Button layoutX="84.0" layoutY="334.0" mnemonicParsing="false" onAction="#clearAction" prefHeight="27.0" prefWidth="185.0" text="Clear" />
-      <Label layoutX="87.0" layoutY="162.0" prefHeight="17.0" prefWidth="68.0" text="UserName" />
-      <Label layoutX="87.0" layoutY="219.0" prefHeight="17.0" prefWidth="75.0" text="PrimaryKey" />
-      <ImageView fitHeight="92.0" fitWidth="183.0" layoutX="260.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
+      <Label layoutX="87.0" layoutY="137.0" prefHeight="17.0" prefWidth="68.0" text="UserName" />
+      <Label layoutX="86.0" layoutY="183.0" prefHeight="17.0" prefWidth="75.0" text="PrivateKey" />
+      <ImageView fitHeight="92.0" fitWidth="183.0" layoutX="263.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="hades.png" />
          </image>
       </ImageView>
-      <TextField fx:id="projectName" layoutX="183.0" layoutY="274.0" prefHeight="34.0" prefWidth="330.0" />
-      <Label layoutX="84.0" layoutY="283.0" prefHeight="17.0" prefWidth="81.0" text="ProjectName" />
+      <TextField fx:id="projectName" layoutX="183.0" layoutY="224.0" prefHeight="34.0" prefWidth="330.0" promptText="hades" />
+      <Label layoutX="85.0" layoutY="232.0" prefHeight="17.0" prefWidth="81.0" text="ProjectName" />
+      <TextField fx:id="projectPath" layoutX="183.0" layoutY="276.0" prefHeight="34.0" prefWidth="330.0" promptText="zcfrank1st/hades" />
+      <Label layoutX="85.0" layoutY="284.0" prefHeight="17.0" prefWidth="81.0" text="ProjectPath" />
    </children>
 </Pane>

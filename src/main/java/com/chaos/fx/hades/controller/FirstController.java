@@ -1,6 +1,8 @@
 package com.chaos.fx.hades.controller;
 
-import com.chaos.fx.hades.model.DataSaver;
+import com.chaos.fx.hades.model.InfoMeta;
+import com.chaos.fx.hades.util.Api;
+import com.chaos.fx.hades.util.DataSaver;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,9 +21,11 @@ public class FirstController {
     @FXML
     private TextField userName;
     @FXML
-    private TextField primaryKey;
+    private TextField privateKey;
     @FXML
     private TextField projectName;
+    @FXML
+    private TextField projectPath;
     @FXML
     private Button submitBtn;
 
@@ -29,18 +33,25 @@ public class FirstController {
     @FXML
     public void submitAction () throws IOException {
         String userNameText = userName.getText();
-        String primaryKeyText = primaryKey.getText();
+        String privateKeyText = privateKey.getText();
         String projectNameText = projectName.getText();
+        String projectPathText = projectPath.getText();
 
         if (userNameText.equals("")
-                || primaryKeyText.equals("")
-                || projectNameText.equals("")) {
+                || privateKeyText.equals("")
+                || projectNameText.equals("")
+                || projectPathText.equals("")) {
 
-            makeAlert(" Warning ! ", "用户名，私钥或者项目名中有未填写的");
+            makeAlert(" Warning ! ", "用户名，私钥,项目名或者项目路径中有未填写的");
         } else {
-            DataSaver.INSTANCE.setData("userName", userNameText);
-            DataSaver.INSTANCE.setData("primaryKey", primaryKeyText);
-            DataSaver.INSTANCE.setData("projectName", projectNameText);
+            DataSaver.INSTANCE.setData(DataSaver.USER_NAME, userNameText);
+            DataSaver.INSTANCE.setData(DataSaver.PRIVATE_KEY, privateKeyText);
+            DataSaver.INSTANCE.setData(DataSaver.PROJECT_NAME, projectNameText);
+            DataSaver.INSTANCE.setData(DataSaver.PROJECT_PATH, projectPathText);
+
+            // TODO check response to jump
+            Api.exists(privateKeyText, userNameText, projectNameText, projectPathText);
+
             Stage stage = (Stage) submitBtn.getScene().getWindow();
             Parent root = FXMLLoader.load(ClassLoader.getSystemResource("second.fxml"));
             Scene scene = new Scene(root);
@@ -51,7 +62,7 @@ public class FirstController {
     @FXML
     public void clearAction () {
         userName.setText("");
-        primaryKey.setText("");
+        privateKey.setText("");
         projectName.setText("");
     }
 

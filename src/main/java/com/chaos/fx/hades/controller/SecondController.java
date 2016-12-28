@@ -37,6 +37,8 @@ public class SecondController {
     @FXML
     private TableColumn<Kv, Kv> prdBtnColumn;
 
+    private Integer profile = 1; // dev
+
     @FXML
     public void deleteAllAction() {
         // TODO delete api
@@ -52,11 +54,11 @@ public class SecondController {
     @FXML
     public void loadData() {
         if (devTab != null && devTab.isSelected()) {
-            System.out.println("this is dev");
+            this.profile = 1;
             devKvTableView.setItems(this.queryData("dev"));
         }
         if (prdTab != null && prdTab.isSelected()) {
-            System.out.println("this is prd");
+            this.profile = 0;
             prdKvTableView.setItems(this.queryData("prd"));
         }
     }
@@ -78,10 +80,10 @@ public class SecondController {
     private ObservableList<Kv> queryData (String profile) {
         ObservableList<Kv> lists = FXCollections.observableArrayList();
         if ("dev".equals(profile)) {
-            // TODO get data api
+            // TODO get dev data
             lists.add(new Kv("1", "3"));
         } else if ("prd".equals(profile)){
-            // TODO
+            // TODO get prd data
             lists.add(new Kv("hh", "bb"));
         }
         return lists;
@@ -96,16 +98,16 @@ public class SecondController {
         ButtonCell(){
             cellButton = new Button();
             cellButton.setOnAction(t -> {
-                // do something when button clicked
                 Kv kv = getItem();
 
                 System.out.println(kv.getKey());
                 System.out.println(kv.getValue());
+
+                // TODO delete one
                 // do something with record....
             });
         }
 
-        //Display button if the row is not empty
         @Override
         protected void updateItem(Kv kv, boolean empty) {
             super.updateItem(kv, empty);
