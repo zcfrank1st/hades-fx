@@ -77,13 +77,17 @@ public class SecondController {
         InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
         Response deleteResponse = Api.deleteAll(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), meta.getProjectPath());
 
-        if (deleteResponse.isSuccessful()) {
-            Stage stage = (Stage) deleteAllBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(ClassLoader.getSystemResource("first.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-        } else {
-            makeAlert(" ERROR ! ", "删除项目所有配置失败");
+        try {
+            if (deleteResponse.isSuccessful()) {
+                Stage stage = (Stage) deleteAllBtn.getScene().getWindow();
+                Parent root = FXMLLoader.load(ClassLoader.getSystemResource("first.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            } else {
+                makeAlert(" ERROR ! ", "删除项目所有配置失败");
+            }
+        } finally {
+            deleteResponse.body().close();
         }
     }
 
@@ -103,10 +107,14 @@ public class SecondController {
             configContent.setValue(value);
             Response addResponse = Api.addOne(meta.getPrivateKey(), meta.getUserName(), configContent, meta.getProjectPath());
 
-            if (addResponse.isSuccessful()) {
-                this.dataReload(this.profile);
-            } else {
-                makeAlert(" ERROR ! ", "新增配置失败，请重试");
+            try {
+                if (addResponse.isSuccessful()) {
+                    this.dataReload(this.profile);
+                } else {
+                    makeAlert(" ERROR ! ", "新增配置失败，请重试");
+                }
+            } finally {
+                addResponse.body().close();
             }
         }
 
@@ -144,12 +152,12 @@ public class SecondController {
 
         InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
         Response response = Api.getAllThroughProfile(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), profile, meta.getProjectPath());
+        ResponseBody body = response.body();
 
-        if (!response.isSuccessful()) {
-            makeAlert(" Error! ", "获取项目配置失败");
-        } else {
-            ResponseBody body = response.body();
-            try {
+        try {
+            if (!response.isSuccessful()) {
+                makeAlert(" Error! ", "获取项目配置失败");
+            } else {
                 Message<Map<String, String>> message = gson.fromJson(body.string(), new TypeToken<Message<Map<String, String>>>() {
                 }.getType());
                 Map<String, String> bodyMap = message.getBody();
@@ -158,17 +166,15 @@ public class SecondController {
                     Kv kv = new Kv(key, bodyMap.get(key));
                     lists.add(kv);
                 }
-            } finally {
-                body.close();
             }
+            return lists;
+        } finally {
+            body.close();
         }
-
-        return lists;
     }
 
 
     private class ButtonCell extends TableCell<Kv, Kv> {
-
 
         private Button cellButton;
 
@@ -181,10 +187,14 @@ public class SecondController {
                 try {
                     Response response = Api.deleteOne(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), profile, kv.getKey().getValueSafe(), meta.getProjectPath());
 
-                    if (response.isSuccessful()) {
-                        dataReload(profile);
-                    } else {
-                        makeAlert(" ERROR! " , "删除单条配置失败");
+                    try {
+                        if (response.isSuccessful()) {
+                            dataReload(profile);
+                        } else {
+                            makeAlert(" ERROR! ", "删除单条配置失败");
+                        }
+                    } finally {
+                        response.body().close();
                     }
                 } catch (IOException e) {
                     makeAlert(" ERROR! " , "删除单条配置失败");

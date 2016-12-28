@@ -37,13 +37,17 @@ public class MediController {
         InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
         Response createResponse = Api.init(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), meta.getProjectPath());
 
-        if (createResponse.isSuccessful()) {
-            Stage stage = (Stage) createBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(ClassLoader.getSystemResource("second.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-        } else {
-            makeAlert(" Error ! ", "初始化项目配置失败");
+        try {
+            if (createResponse.isSuccessful()) {
+                Stage stage = (Stage) createBtn.getScene().getWindow();
+                Parent root = FXMLLoader.load(ClassLoader.getSystemResource("second.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            } else {
+                makeAlert(" Error ! ", "初始化项目配置失败");
+            }
+        } finally {
+            createResponse.body().close();
         }
     }
 

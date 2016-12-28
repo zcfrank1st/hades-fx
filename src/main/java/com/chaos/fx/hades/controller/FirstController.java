@@ -55,22 +55,28 @@ public class FirstController {
 
             Response response = Api.exists(privateKeyText, userNameText, projectNameText, projectPathText);
 
-            if (! response.isSuccessful()) {
-                makeAlert(" Error ! ", "用户名，私钥,项目名或者项目路径中有错误");
-            } else {
-                Message message = gson.fromJson(response.body().string(), Message.class);
-                DataSaver.INSTANCE.setData("role", message.getCode() + "");
-                Stage stage = (Stage) submitBtn.getScene().getWindow();
+            try {
 
-                if ((Boolean) message.getBody()) {
-                    Parent root = FXMLLoader.load(ClassLoader.getSystemResource("second.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
+
+                if (!response.isSuccessful()) {
+                    makeAlert(" Error ! ", "用户名，私钥,项目名或者项目路径中有错误");
                 } else {
-                    Parent root = FXMLLoader.load(ClassLoader.getSystemResource("medi.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
+                    Message message = gson.fromJson(response.body().string(), Message.class);
+                    DataSaver.INSTANCE.setData("role", message.getCode() + "");
+                    Stage stage = (Stage) submitBtn.getScene().getWindow();
+
+                    if ((Boolean) message.getBody()) {
+                        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("second.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                    } else {
+                        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("medi.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                    }
                 }
+            } finally {
+                response.body().close();
             }
 
         }
