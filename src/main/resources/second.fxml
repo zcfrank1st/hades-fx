@@ -11,10 +11,10 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chaos.fx.hades.controller.SecondController">
    <children>
-      <Button fx:id="deleteAllBtn" layoutX="24.0" layoutY="23.0" mnemonicParsing="false" onAction="#deleteAllAction" prefHeight="27.0" prefWidth="129.0" text="delete all configs" />
-      <TextField fx:id="keyField" layoutX="185.0" layoutY="23.0" prefHeight="27.0" prefWidth="150.0" promptText="KEY" />
-      <Button layoutX="512.0" layoutY="23.0" mnemonicParsing="false" onAction="#addAction" prefHeight="27.0" prefWidth="59.0" text="add" />
-      <TextField fx:id="valueField" layoutX="348.0" layoutY="23.0" prefHeight="27.0" prefWidth="150.0" promptText="VALUE" />
+      <Button fx:id="deleteAllBtn" defaultButton="true" layoutX="24.0" layoutY="23.0" mnemonicParsing="false" onAction="#deleteAllAction" prefHeight="27.0" prefWidth="129.0" text="delete all configs" />
+      <TextField fx:id="keyField" layoutX="167.0" layoutY="23.0" prefHeight="27.0" prefWidth="138.0" promptText="KEY" />
+      <Button layoutX="460.0" layoutY="23.0" mnemonicParsing="false" onAction="#addAction" prefHeight="27.0" prefWidth="59.0" text="add" />
+      <TextField fx:id="valueField" layoutX="314.0" layoutY="23.0" prefHeight="27.0" prefWidth="138.0" promptText="VALUE" />
       <TabPane fx:id="tabPane" layoutX="24.0" layoutY="64.0" prefHeight="310.0" prefWidth="548.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="devTab" onSelectionChanged="#loadData" text="dev">
@@ -48,5 +48,6 @@
           </Tab>
         </tabs>
       </TabPane>
+      <Button fx:id="backBtn" defaultButton="true" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#backAction" prefHeight="27.0" prefWidth="52.0" text="Back " />
    </children>
 </Pane>

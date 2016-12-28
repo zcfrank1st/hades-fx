@@ -16,9 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -34,6 +32,8 @@ import static com.chaos.fx.hades.util.Dialog.makeAlert;
 public class SecondController {
     private static final Gson gson = new Gson();
 
+    @FXML
+    private Button backBtn;
     @FXML
     private Button deleteAllBtn;
     @FXML
@@ -63,6 +63,14 @@ public class SecondController {
     private TableColumn<Kv, Kv> prdBtnColumn;
 
     private Integer profile = 1; // dev
+
+    @FXML
+    public void backAction() throws IOException {
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("first.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
 
     @FXML
     public void deleteAllAction() throws IOException {

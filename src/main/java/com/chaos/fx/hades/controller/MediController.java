@@ -21,7 +21,16 @@ import static com.chaos.fx.hades.util.Dialog.makeAlert;
 public class MediController {
     @FXML
     private Button createBtn;
+    @FXML
+    private Button backBtn;
 
+    @FXML
+    public void backAction () throws IOException {
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("first.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
 
     @FXML
     public void createAction () throws IOException {

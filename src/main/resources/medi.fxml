@@ -6,5 +6,6 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chaos.fx.hades.controller.MediController">
    <children>
       <Button fx:id="createBtn" layoutX="214.0" layoutY="179.0" mnemonicParsing="false" onAction="#createAction" prefHeight="61.0" prefWidth="173.0" text="Create" />
+      <Button fx:id="backBtn" layoutX="532.0" layoutY="14.0" mnemonicParsing="false" onAction="#backAction" prefHeight="27.0" prefWidth="54.0" text="Back " />
    </children>
 </Pane>
