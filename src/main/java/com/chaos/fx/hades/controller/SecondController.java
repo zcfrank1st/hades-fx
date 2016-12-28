@@ -6,6 +6,7 @@ import com.chaos.fx.hades.model.Kv;
 import com.chaos.fx.hades.model.Message;
 import com.chaos.fx.hades.util.Api;
 import com.chaos.fx.hades.util.DataSaver;
+import com.chaos.fx.hades.util.Tool;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -30,7 +31,7 @@ import static com.chaos.fx.hades.util.Dialog.makeAlert;
  * Created by zcfrank1st on 27/12/2016.
  */
 public class SecondController {
-    private static final Gson gson = new Gson();
+    private static final Gson gson = Tool.GSON_INSTANCE;
 
     @FXML
     private Button backBtn;
