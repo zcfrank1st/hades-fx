@@ -1,16 +1,25 @@
 package com.chaos.fx.hades.controller;
 
+import com.chaos.fx.hades.model.InfoMeta;
 import com.chaos.fx.hades.model.Kv;
+import com.chaos.fx.hades.util.Api;
+import com.chaos.fx.hades.util.DataSaver;
+import com.google.gson.Gson;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import okhttp3.Response;
+
+import java.io.IOException;
 
 /**
  * Created by zcfrank1st on 27/12/2016.
  */
 public class SecondController {
+    private static final Gson gson = new Gson();
+
     @FXML
     private TextField keyField;
     @FXML
@@ -40,9 +49,12 @@ public class SecondController {
     private Integer profile = 1; // dev
 
     @FXML
-    public void deleteAllAction() {
+    public void deleteAllAction() throws IOException {
         // TODO delete api
-        System.out.println("delete all");
+        InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
+        Response deleteResponse = Api.deleteAll(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), meta.getProjectPath());
+
+
     }
 
     @FXML
