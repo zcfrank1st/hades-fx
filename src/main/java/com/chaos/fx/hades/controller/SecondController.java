@@ -16,8 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.util.Map;
@@ -136,12 +140,18 @@ public class SecondController {
         if (!response.isSuccessful()) {
             makeAlert(" Error! ", "获取项目配置失败");
         } else {
-            Message<Map<String, String>> message = gson.fromJson(response.body().string(), new TypeToken<Message<Map<String, String>>>(){}.getType());
-            Map<String, String> body = message.getBody();
+            ResponseBody body = response.body();
+            try {
+                Message<Map<String, String>> message = gson.fromJson(body.string(), new TypeToken<Message<Map<String, String>>>() {
+                }.getType());
+                Map<String, String> bodyMap = message.getBody();
 
-            for (String key : body.keySet()) {
-                Kv kv = new Kv(key, body.get(key));
-                lists.add(kv);
+                for (String key : bodyMap.keySet()) {
+                    Kv kv = new Kv(key, bodyMap.get(key));
+                    lists.add(kv);
+                }
+            } finally {
+                body.close();
             }
         }
 
@@ -178,7 +188,12 @@ public class SecondController {
         protected void updateItem(Kv kv, boolean empty) {
             super.updateItem(kv, empty);
             if(!empty){
-                cellButton.setText("-");
+                cellButton.setText("delete");
+                cellButton.setFont(Font.font(10));
+                cellButton.setMinHeight(20);
+                cellButton.setMaxHeight(20);
+                cellButton.setPrefHeight(20);
+                cellButton.setPrefWidth(80);
                 setGraphic(cellButton);
             } else {
                 setGraphic(null);
@@ -187,6 +202,10 @@ public class SecondController {
     }
 
     private void dataReload (Integer profile) throws IOException {
-        devKvTableView.setItems(this.queryData(profile));
+        if (profile == 0) {
+            prdKvTableView.setItems(this.queryData(profile));
+        } else {
+            devKvTableView.setItems(this.queryData(profile));
+        }
     }
 }
