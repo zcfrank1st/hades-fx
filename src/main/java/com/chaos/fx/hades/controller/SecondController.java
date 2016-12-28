@@ -1,18 +1,28 @@
 package com.chaos.fx.hades.controller;
 
+import com.chaos.fx.hades.model.ConfigContent;
 import com.chaos.fx.hades.model.InfoMeta;
 import com.chaos.fx.hades.model.Kv;
+import com.chaos.fx.hades.model.Message;
 import com.chaos.fx.hades.util.Api;
 import com.chaos.fx.hades.util.DataSaver;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.Map;
+
+import static com.chaos.fx.hades.util.Dialog.makeAlert;
 
 /**
  * Created by zcfrank1st on 27/12/2016.
@@ -20,6 +30,8 @@ import java.io.IOException;
 public class SecondController {
     private static final Gson gson = new Gson();
 
+    @FXML
+    private Button deleteAllBtn;
     @FXML
     private TextField keyField;
     @FXML
@@ -50,28 +62,54 @@ public class SecondController {
 
     @FXML
     public void deleteAllAction() throws IOException {
-        // TODO delete api
         InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
         Response deleteResponse = Api.deleteAll(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), meta.getProjectPath());
 
+        if (deleteResponse.isSuccessful()) {
+            Stage stage = (Stage) deleteAllBtn.getScene().getWindow();
+            Parent root = FXMLLoader.load(ClassLoader.getSystemResource("first.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        } else {
+            makeAlert(" ERROR ! ", "删除项目所有配置失败");
+        }
+    }
+
+    @FXML
+    public void addAction() throws IOException {
+        String key = keyField.getText();
+        String value = valueField.getText();
+
+        if (key.equals("") || value.equals("")) {
+            makeAlert(" Warning ! ", "新增配置缺少key或者value");
+        } else {
+            InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
+            ConfigContent configContent = new ConfigContent();
+            configContent.setEnv(this.profile);
+            configContent.setKey(key);
+            configContent.setProject(meta.getProjectName());
+            configContent.setValue(value);
+            Response addResponse = Api.addOne(meta.getPrivateKey(), meta.getUserName(), configContent, meta.getProjectPath());
+
+            if (addResponse.isSuccessful()) {
+                this.dataReload(this.profile);
+            } else {
+                makeAlert(" ERROR ! ", "新增配置失败，请重试");
+            }
+        }
+
 
     }
 
     @FXML
-    public void addAction() {
-        // TODO add api
-        System.out.println("add action");
-    }
-
-    @FXML
-    public void loadData() {
+    public void loadData() throws IOException {
         if (devTab != null && devTab.isSelected()) {
             this.profile = 1;
-            devKvTableView.setItems(this.queryData("dev"));
+            devKvTableView.setItems(this.queryData(this.profile));
         }
         if (prdTab != null && prdTab.isSelected()) {
             this.profile = 0;
-            prdKvTableView.setItems(this.queryData("prd"));
+            prdKvTableView.setItems(this.queryData(this.profile));
         }
     }
 
@@ -89,15 +127,24 @@ public class SecondController {
         prdBtnColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue()));
     }
 
-    private ObservableList<Kv> queryData (String profile) {
+    private ObservableList<Kv> queryData (Integer profile) throws IOException {
         ObservableList<Kv> lists = FXCollections.observableArrayList();
-        if ("dev".equals(profile)) {
-            // TODO get dev data
-            lists.add(new Kv("1", "3"));
-        } else if ("prd".equals(profile)){
-            // TODO get prd data
-            lists.add(new Kv("hh", "bb"));
+
+        InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
+        Response response = Api.getAllThroughProfile(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), profile, meta.getProjectPath());
+
+        if (!response.isSuccessful()) {
+            makeAlert(" Error! ", "获取项目配置失败");
+        } else {
+            Message<Map<String, String>> message = gson.fromJson(response.body().string(), new TypeToken<Message<Map<String, String>>>(){}.getType());
+            Map<String, String> body = message.getBody();
+
+            for (String key : body.keySet()) {
+                Kv kv = new Kv(key, body.get(key));
+                lists.add(kv);
+            }
         }
+
         return lists;
     }
 
@@ -112,11 +159,18 @@ public class SecondController {
             cellButton.setOnAction(t -> {
                 Kv kv = getItem();
 
-                System.out.println(kv.getKey());
-                System.out.println(kv.getValue());
+                InfoMeta meta = DataSaver.INSTANCE.getInfoMeta();
+                try {
+                    Response response = Api.deleteOne(meta.getPrivateKey(), meta.getUserName(), meta.getProjectName(), profile, kv.getKey().getValueSafe(), meta.getProjectPath());
 
-                // TODO delete one
-                // do something with record....
+                    if (response.isSuccessful()) {
+                        dataReload(profile);
+                    } else {
+                        makeAlert(" ERROR! " , "删除单条配置失败");
+                    }
+                } catch (IOException e) {
+                    makeAlert(" ERROR! " , "删除单条配置失败");
+                }
             });
         }
 
@@ -130,5 +184,9 @@ public class SecondController {
                 setGraphic(null);
             }
         }
+    }
+
+    private void dataReload (Integer profile) throws IOException {
+        devKvTableView.setItems(this.queryData(profile));
     }
 }
