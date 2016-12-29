@@ -17,6 +17,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import okhttp3.Response;
 
+import java.sql.SQLException;
+
 import static com.chaos.fx.hades.util.Dialog.makeAlert;
 
 /**
@@ -24,7 +26,12 @@ import static com.chaos.fx.hades.util.Dialog.makeAlert;
  */
 public class FirstController {
     private static final Gson gson = Tool.GSON_INSTANCE;
-    private static final StoreStrategy strategy = StrategyFactory.buildStrategy();
+
+    private StoreStrategy strategy;
+
+    public FirstController () throws SQLException, ClassNotFoundException {
+        strategy = StrategyFactory.buildStrategy();
+    }
 
     @FXML
     private TextField userName;

@@ -11,4 +11,13 @@ public class InfoMeta {
     private String userName;
     private String projectName;
     private String projectPath;
+
+    public InfoMeta () {}
+
+    public InfoMeta (String userName, String privateKey, String projectName, String projectPath) {
+        this.userName = userName;
+        this.privateKey = privateKey;
+        this.projectName = projectName;
+        this.projectPath = projectPath;
+    }
 }
