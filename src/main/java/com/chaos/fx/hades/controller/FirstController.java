@@ -2,8 +2,9 @@ package com.chaos.fx.hades.controller;
 
 import com.chaos.fx.hades.model.InfoMeta;
 import com.chaos.fx.hades.model.Message;
+import com.chaos.fx.hades.store.StrategyFactory;
+import com.chaos.fx.hades.store.strategy.StoreStrategy;
 import com.chaos.fx.hades.util.Api;
-import com.chaos.fx.hades.util.Conf;
 import com.chaos.fx.hades.util.DataSaver;
 import com.chaos.fx.hades.util.Tool;
 import com.google.gson.Gson;
@@ -15,13 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import okhttp3.Response;
-import org.yaml.snakeyaml.Yaml;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static com.chaos.fx.hades.util.Dialog.makeAlert;
 
@@ -30,7 +24,7 @@ import static com.chaos.fx.hades.util.Dialog.makeAlert;
  */
 public class FirstController {
     private static final Gson gson = Tool.GSON_INSTANCE;
-    private static final String STORE_FILE = Conf.conf.getString("hades.filestore") + "hadesfx.yml";
+    private static final StoreStrategy strategy = StrategyFactory.buildStrategy();
 
     @FXML
     private TextField userName;
@@ -44,7 +38,7 @@ public class FirstController {
     private Button submitBtn;
 
     @FXML
-    public void submitAction () throws IOException {
+    public void submitAction () throws Exception {
         String userNameText = userName.getText();
         String privateKeyText = privateKey.getText();
         String projectNameText = projectName.getText();
@@ -72,7 +66,7 @@ public class FirstController {
                 } else {
                     Message message = gson.fromJson(response.body().string(), Message.class);
                     DataSaver.INSTANCE.setData("role", message.getCode() + "");
-                    writeStoreFile(userNameText, privateKeyText, projectNameText, projectPathText);
+                    strategy.writeStore(userNameText, privateKeyText, projectNameText, projectPathText);
 
                     Stage stage = (Stage) submitBtn.getScene().getWindow();
 
@@ -94,8 +88,8 @@ public class FirstController {
     }
 
     @FXML
-    private void initialize() throws IOException {
-        InfoMeta meta = readStoreFile();
+    private void initialize() throws Exception {
+        InfoMeta meta = strategy.readStore();
         if (null != meta) {
             userName.setText(meta.getUserName());
             privateKey.setText(meta.getPrivateKey());
@@ -110,24 +104,5 @@ public class FirstController {
         privateKey.setText("");
         projectName.setText("");
         projectPath.setText("");
-    }
-
-    private void writeStoreFile (String userNameText, String privateKeyText, String projectNameText, String projectPathText) throws IOException {
-        Yaml yaml = new Yaml();
-        InfoMeta meta = new InfoMeta();
-        meta.setUserName(userNameText);
-        meta.setPrivateKey(privateKeyText);
-        meta.setProjectName(projectNameText);
-        meta.setProjectPath(projectPathText);
-        yaml.dump(meta, new FileWriter(new File(STORE_FILE)));
-    }
-
-    private InfoMeta readStoreFile () throws IOException {
-        if (!Files.exists(Paths.get(STORE_FILE))) {
-            return null;
-        }
-
-        Yaml yaml = new Yaml();
-        return yaml.loadAs(Files.newInputStream(Paths.get(STORE_FILE)), InfoMeta.class);
     }
 }
